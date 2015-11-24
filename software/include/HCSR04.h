@@ -2,12 +2,15 @@
 
 #include <stdint.h>
 #include "nrf_gpio.h"
+//#include "nrf_timer.h"
 
+//struct representing the HC-SR04 ultrasonic distance sensor
 typedef struct HCSR04sensor
 {
-	int trigger_pin_number;
-	int echo_pin_number;
-}; HCSR04
+	int trigger_pin_number;	//pin number for the trigger pin
+	int echo_pin_number;	//pin number for the echo pin
+//	NRF_TIMER_Type * NRF_TIMERx;	//the timer that this sensor is using for its timing
+} HCSR04;
 
 void hcsr04_init(HCSR04 * sensor);
 
