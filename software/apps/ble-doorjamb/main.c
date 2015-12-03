@@ -41,7 +41,7 @@ int main(void)
     led_on(LED_1);
     led_on(LED_2);
     while (1) {
-        broadcast_action(test++,timer++, experiment++);
+        //broadcast_action(test,timer, experiment);
         power_manage();
     }
 }

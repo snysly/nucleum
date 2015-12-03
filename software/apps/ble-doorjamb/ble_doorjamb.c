@@ -14,8 +14,8 @@
 #include "ble_doorjamb.h"
 
 #define DOORJAMB_SHORT_UUID 0x3210
-#define DOOR_ID_SHORT_UUID 0x0123
-#define HEIGHT_SHORT_UUID 0x4567
+#define DOOR_ID_SHORT_UUID 0x7654
+#define HEIGHT_SHORT_UUID 0x0123
 #define TIME_SHORT_UUID 0x89AB
 #define TIME_ACTION_SHORT_UUID 0xCDEF
 #define ACTION_SHORT_UUID 0x12EF
@@ -34,7 +34,7 @@ static simple_ble_config_t ble_config = {
     .device_id         = DEVICE_ID_DEFAULT,
     .adv_name          = DEVICE_NAME,       // used in advertisements if there is room
     .adv_interval      = MSEC_TO_UNITS(100, UNIT_0_625_MS),
-    .min_conn_interval = MSEC_TO_UNITS(500, UNIT_1_25_MS),
+    .min_conn_interval = MSEC_TO_UNITS(100, UNIT_1_25_MS),
     .max_conn_interval = MSEC_TO_UNITS(1000, UNIT_1_25_MS)
 };
 
@@ -47,7 +47,7 @@ ble_uuid_t service_detailed_uuid = {
 // Create Doorjamb service with an unofficial 128-bit UIUD
 const ble_uuid128_t service_uiud = {
     {0xEF, 0xCD, 0xAB, 0x89, 0x67, 0x45, 0x23, 0x01, 
-    0xEF, 0xCD, 0xAB, 0x89, 0x67, 0x45, 0x23, 0x01}
+    0xEF, 0xCD, 0xAB, 0x89, 0x67, 0x45, 0x23, 0x51}
 };
 
 /* CHARACTERISTIC STRUCTURES */
