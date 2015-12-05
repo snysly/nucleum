@@ -27,7 +27,7 @@ void TIMER0_IRQHandler(void)
 void hcsr04_init(HCSR04 * sensor)
 {
 	nrf_gpio_cfg_output(sensor->trigger_pin_number);
-	nrf_gpio_cfg_input(sensor->echo_pin_number, NRF_GPIO_PIN_PULLDOWN);
+	nrf_gpio_cfg_input(sensor->echo_pin_number, NRF_GPIO_PIN_PULLUP);
 //	NRF_TIMERx = TIMER0;
 
 	//enabling the interrupts
@@ -36,11 +36,21 @@ void hcsr04_init(HCSR04 * sensor)
 
 double get_dist(HCSR04 * sensor)
 {
+	//uint32_t high_time = 2;
 	send_trigger(sensor);
-	return 0.0;
-	uint32_t high_time = get_high_time(sensor);
-	double two = high_time;
-	return two;
+	//return 0.0;
+	/*if(nrf_gpio_pin_read(sensor->echo_pin_number) == 1)
+	{
+		return 1.0;
+	}
+	else
+		return 0.0;
+		*/
+	//double two = high_time;
+	return get_high_time(sensor);
+	//two = high_time;
+	//return two;
+	
 }
 
 void send_trigger(HCSR04 * sensor)
@@ -52,7 +62,7 @@ void send_trigger(HCSR04 * sensor)
 	nrf_gpio_pin_set(sensor->trigger_pin_number);
 	nrf_delay_us(12);
 	nrf_gpio_pin_clear(sensor->trigger_pin_number);
-	nrf_delay_us(20);
+//	nrf_delay_us(20);
 }
 
 
