@@ -4,22 +4,22 @@
 #include "ParallaxPIR.h"
 
 //define parameters for the pins things are connected to
-#define HCSR04_TRIGGER_1
-#define HCSR04_ECHO_1
-#define HCSR04_TRIGGER_2
-#define HCSR04_ECHO_2
+#define HCSR04_TRIGGER_1 24
+#define HCSR04_ECHO_1	23
+#define HCSR04_TRIGGER_2 21
+#define HCSR04_ECHO_2 22
 
-#define PIR_1_INPUT
-#define PIR_2_INPUT
+#define PIR_1_INPUT 9
+#define PIR_2_INPUT 10
 
 //miscellaneous macros needed
 //maximum number of measurements that can be taken by distance sensors
-#define MAX_NUM_MEASUREMENTS
+#define MAX_NUM_MEASUREMENTS 1000
 //lower bound for deciding if the distance measurement measured no person
-#define NULL_MEASUREMENT_LOWER_BOUND
+#define NULL_MEASUREMENT_LOWER_BOUND 20000
 
-bool run = false;
-int most_recent_pin;
+volatile int run = false;
+volatile int most_recent_pin;
 void pir_callback(nrf_drv_gpiote_pin_t pin_in, nrf_gpiote_polarity_t action)
 {
 	run = !run;
@@ -51,12 +51,12 @@ int main(void)
 	pir_init(&pir_2);
 
 	//intialize data collection 
-	double dist_vals[MAX_NUM_MEASUREMENTS];
-	int dir[2];
+	volatile double dist_vals[MAX_NUM_MEASUREMENTS];
+	volatile int dir[2];
 	//actual loops
 	while(1)
 	{
-		if(run)
+		if(run == 1)
 		{
 			//record which side of the door is most recent
 			dir[0] = most_recent_pin;
@@ -75,12 +75,12 @@ int main(void)
 
 			//when done with max number of measurements, or crossing has been called off
 			int j = 0;
-			double total_value = 0.0;
-			int num_values = 0;
+			volatile double total_value = 0.0;
+			volatile int num_values = 0;
 			for(j = 0; j < i; ++j)
 			{
 				//check if the value is an actual or missed measurement
-				if(dist_vals[j] < NULL_MEASUEMENT_LOWER_BOUND)
+				if(dist_vals[j] < NULL_MEASUREMENT_LOWER_BOUND)
 				{
 					//if it is an actual measurement, record data for averaging
 					total_value += dist_vals[j];
@@ -88,7 +88,7 @@ int main(void)
 				}
 
 				//zero out the distance values to prevent future problems
-				dist_vals[j] = 0.0;
+			//`	dist_vals[j] = 0.0;
 			}
 
 			//get the average for sending
