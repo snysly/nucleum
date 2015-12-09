@@ -17,18 +17,6 @@
 #include "simple_doorjamb_adv.h"
 //#include "simple_adv.h"
 
-
-// Intervals for advertising and connections
-static simple_ble_config_t ble_config = {
-    .platform_id       = 0x80,              // used as 4th octect in device BLE address
-    .device_id         = DEVICE_ID_DEFAULT,
-    .adv_name          = DEVICE_NAME,       // used in advertisements if there is room
-    .adv_interval      = MSEC_TO_UNITS(100, UNIT_0_625_MS),
-    .min_conn_interval = MSEC_TO_UNITS(500, UNIT_1_25_MS),
-    .max_conn_interval = MSEC_TO_UNITS(1000, UNIT_1_25_MS)
-};
-
-
 int main(void) {
     uint32_t err_code;
 

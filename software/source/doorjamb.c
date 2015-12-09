@@ -38,7 +38,7 @@ void assign_pir_sensors(Doorjamb * door, uint32_t gpio_1, callback_func func_1,
 //configures all the sensors and the ble
 void doorjamb_init(Doorjamb * door)
 {
-	simple_adv_init(door->door_id);
+	simple_adv_init();
 	simple_adv_start();
 	hcsr04_init(&(door->dist_sensor1));
 	hcsr04_init(&(door->dist_sensor2));
