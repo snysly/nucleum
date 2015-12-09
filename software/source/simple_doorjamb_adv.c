@@ -30,6 +30,18 @@
 #include "simple_adv.h"
 #include "simple_doorjamb_adv.h"
 
+#define DEVICE_NAME "doorjamb-door"
+
+// Intervals for advertising and connections
+static simple_ble_config_t ble_config = {
+    .platform_id       = 0x80,              // used as 4th octect in device BLE address
+    .device_id         = DEVICE_ID_DEFAULT,
+    .adv_name          = DEVICE_NAME,       // used in advertisements if there is room
+    .adv_interval      = MSEC_TO_UNITS(100, UNIT_0_625_MS),
+    .min_conn_interval = MSEC_TO_UNITS(500, UNIT_1_25_MS),
+    .max_conn_interval = MSEC_TO_UNITS(1000, UNIT_1_25_MS)
+};
+
 typedef enum {INVALID, A_B, B_A, A_A, B_B} action_type_t; 
 
 static ble_advdata_manuf_data_t adv_manuf_data;
@@ -40,9 +52,9 @@ uint8_array_t adv_manuf_data_array;
 // byte 5:      transaction_count
 uint8_t adv_manuf_data_data[6];
 
-void simple_adv_init(simple_ble_config_t * ble_config)
+void simple_adv_init()
 {
-    simple_ble_init(ble_config);
+    simple_ble_init(&ble_config);
 }
 
 void simple_adv_start()

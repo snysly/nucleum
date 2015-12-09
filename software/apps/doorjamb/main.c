@@ -1,7 +1,5 @@
 #include <stdint.h>
-#include <stdbool.h>
-#include "HCSR04.h"
-#include "ParallaxPIR.h"
+#include "doorjamb.h"
 
 //define parameters for the pins things are connected to
 #define HCSR04_TRIGGER_1 24
@@ -18,6 +16,10 @@
 //lower bound for deciding if the distance measurement measured no person
 #define NULL_MEASUREMENT_LOWER_BOUND 20000
 
+//set the ID of the DOOR
+#define DOOR_ID 1
+
+/*
 volatile int run = false;
 volatile int most_recent_pin;
 void pir_callback(nrf_drv_gpiote_pin_t pin_in, nrf_gpiote_polarity_t action)
@@ -25,9 +27,27 @@ void pir_callback(nrf_drv_gpiote_pin_t pin_in, nrf_gpiote_polarity_t action)
 	run = !run;
 	most_recent_pin = pin_in;
 }
+*/
 
 int main(void)
 {
+	//create a new doorjamb
+	Doorjamb door;
+
+	//assign the pin numbers and the door id
+	door.door_id = DOOR_ID;
+	assign_dist_sensors(&door, HCSR04_TRIGGER_1, HCSR04_ECHO_1,
+							HCSR04_TRIGGER_2, HCSR04_ECHO_2);
+
+	assign_pir_sensors(&door, PIR_1_INPUT, pir_callback, PIR_2_INPUT, pir_callback);
+
+	//initialize the ble and the sensors
+	doorjamb_init(&door);
+
+	//run the door infinitely
+	run_door(&door);
+}
+/*
 	//initialize distance sensors
 	HCSR04 dist_sensor1;
 	dist_sensor1.trigger_pin_number = HCSR04_TRIGGER_1;
@@ -98,3 +118,4 @@ int main(void)
 
 	}
 }
+*/

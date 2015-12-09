@@ -16,6 +16,10 @@ APPLICATION_SRCS += nrf_drv_gpiote.c
 APPLICATION_SRCS += utils.c
 APPLICATION_SRCS += ParallaxPIR.c
 APPLICATION_SRCS += HCSR04.c
+APPLICATION_SRCS += doorjamb.c
+#APPLICATION_SRCS += simple_ble.c
+#APPLICATION_SRCS += simple_adv.c
+APPLICATION_SRCS += simple_doorjamb_adv.c
 
 DEVICE = NRF51
 

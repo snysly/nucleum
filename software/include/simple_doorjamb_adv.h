@@ -12,7 +12,7 @@ typedef enum {INVALID, A_B, B_A, A_A, B_B} action_type_t;
 
 // Functions
 // initializes BLE hardware
-void simple_adv_init(simple_ble_config_t * ble_config);
+void simple_adv_init();
 // begins broadcasting
 void simple_adv_start();
 // Call to transmit each transaction
