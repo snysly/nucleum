@@ -37,7 +37,7 @@ int main(void) {
     led_init(LED_2);
 
     // Setup BLE
-    simple_ble_init(&ble_config);
+    simple_adv_init(&ble_config);
 
     // Advertise because why not
     simple_adv_start();

@@ -11,11 +11,11 @@
 typedef enum {INVALID, A_B, B_A, A_A, B_B} action_type_t; 
 
 // Functions
-// Sends a pre-designated "yes I'm available, not seen a transaction"
+// initializes BLE hardware
+void simple_adv_init(simple_ble_config_t * ble_config);
+// begins broadcasting
 void simple_adv_start();
 // Call to transmit each transaction
 void simple_adv_transaction(uint32_t height, action_type_t action);
-//void simple_adv_only_name ();
-//void simple_adv_service (ble_uuid_t* service_uuid);
 
 #endif
