@@ -31,14 +31,20 @@ void pir_callback(nrf_drv_gpiote_pin_t pin_in, nrf_gpiote_polarity_t action)
 
 int main(void)
 {
+	//create a new doorjamb
 	Doorjamb door;
+
+	//assign the pin numbers and the door id
 	door.door_id = DOOR_ID;
 	assign_dist_sensors(&door, HCSR04_TRIGGER_1, HCSR04_ECHO_1,
 							HCSR04_TRIGGER_2, HCSR04_ECHO_2);
 
 	assign_pir_sensors(&door, PIR_1_INPUT, pir_callback, PIR_2_INPUT, pir_callback);
 
+	//initialize the ble and the sensors
 	doorjamb_init(&door);
+
+	//run the door infinitely
 	run_door(&door);
 }
 /*

@@ -1,4 +1,6 @@
-// HC-SR04 ultrasonic distance sensor library
+#ifndef __HCSR04_H__
+#define __HCSR04_H__
+//HC-SR04 ultrasonic distance sensor library
 
 #include <stdint.h>
 
@@ -16,4 +18,4 @@ uint32_t get_dist(HCSR04 * sensor);
 void send_trigger(HCSR04 * sensor);
 
 uint32_t get_high_time(HCSR04 * sensor);
-
+#endif

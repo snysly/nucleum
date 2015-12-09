@@ -1,4 +1,9 @@
 #include "doorjamb.h"
+#include "simple_ble.h"
+#include "simple_doorjamb_adv.h"
+#include "ble_advdata.h"
+#include "simple_adv.h"
+
 #define NULL_MEASUREMENT_LOWER_BOUND 20000
 #define MAX_NUM_MEASUREMENTS 1000
 
@@ -33,6 +38,8 @@ void assign_pir_sensors(Doorjamb * door, uint32_t gpio_1, callback_func func_1,
 //configures all the sensors and the ble
 void doorjamb_init(Doorjamb * door)
 {
+	simple_adv_init(door->door_id);
+	simple_adv_start();
 	hcsr04_init(&(door->dist_sensor1));
 	hcsr04_init(&(door->dist_sensor2));
 	pir_init(&(door->pir_1));
@@ -92,6 +99,23 @@ void run_door(Doorjamb * door)
 			//get the average for sending
 			double average_height = (double)total_value/((double)num_values);
 			run = false;
+
+			action_type_t action;
+			if(dir[0] == dist_sensor1->echo_pin_number)
+			{
+				if(dir[1] == dist_sensor1->echo_pin_number)
+					action = A_A;
+				else
+					action = A_B;
+			}
+			else
+			{
+				if(dir[1] == dist_sensor1->echo_pin_number)
+					action = B_A;
+				else
+					action = B_B;
+			}
+			simple_adv_transaction((uint32_t)average_height, action);
 		}
 
 	}
