@@ -15,8 +15,10 @@ int main(void)
 
 	hcsr04_init(&sensor);
 	turn_on(&sensor);
-	nrf_delay_us(1000);
-	volatile double result = get_dist(&sensor);
+	nrf_delay_us(1000000);
+
+	volatile double result = 0.0;
+	result = get_dist(&sensor);
 	turn_off(&sensor);
 	return (int)result;
 }

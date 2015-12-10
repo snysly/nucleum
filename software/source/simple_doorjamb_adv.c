@@ -30,7 +30,7 @@
 #include "simple_adv.h"
 #include "simple_doorjamb_adv.h"
 
-#define DEVICE_NAME "doorjamb-door"
+#define DEVICE_NAME "door"
 
 // Intervals for advertising and connections
 static simple_ble_config_t ble_config = {

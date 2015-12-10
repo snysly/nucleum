@@ -10,11 +10,6 @@
 #define PIR_1_INPUT 9
 #define PIR_2_INPUT 10
 
-//miscellaneous macros needed
-//maximum number of measurements that can be taken by distance sensors
-#define MAX_NUM_MEASUREMENTS 1000
-//lower bound for deciding if the distance measurement measured no person
-#define NULL_MEASUREMENT_LOWER_BOUND 20000
 
 //set the ID of the DOOR
 #define DOOR_ID 1

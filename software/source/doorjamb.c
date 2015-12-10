@@ -3,15 +3,21 @@
 #include "simple_doorjamb_adv.h"
 #include "ble_advdata.h"
 #include "simple_adv.h"
+#include "led.h"
 
-#define NULL_MEASUREMENT_LOWER_BOUND 20000
+#define MEASUREMENT_LOWER_BOUND 20000
+#define MEASUREMENT_UPPER_BOUND 1000
 #define MAX_NUM_MEASUREMENTS 1000
 
-int run;
-int most_recent_pin;
+volatile int run = 0;
+volatile int most_recent_pin = 0;
 void pir_callback(nrf_drv_gpiote_pin_t pin_in, nrf_gpiote_polarity_t action)
 {
-	run = !run;
+	
+	if(run == 0)
+		run = 1;
+	else
+		run = 0;
 	most_recent_pin = pin_in;
 }
 
@@ -40,14 +46,14 @@ void doorjamb_init(Doorjamb * door)
 {
 	simple_adv_init();
 	simple_adv_start();
+	led_init(LED_0);
+	led_on(LED_0);
+	led_init(LED_1);
 	hcsr04_init(&(door->dist_sensor1));
 	hcsr04_init(&(door->dist_sensor2));
 	pir_init(&(door->pir_1));
 	pir_init(&(door->pir_2));
 }
-
-extern int run;
-extern int most_recent_pin;
 
 //runs the door
 void run_door(Doorjamb * door)
@@ -85,7 +91,7 @@ void run_door(Doorjamb * door)
 			for(j = 0; j < i; ++j)
 			{
 				//check if the value is an actual or missed measurement
-				if(dist_vals[j] < NULL_MEASUREMENT_LOWER_BOUND)
+				if(dist_vals[j] < MEASUREMENT_UPPER_BOUND && MEASUREMENT_LOWER_BOUND < dist_vals[j])
 				{
 					//if it is an actual measurement, record data for averaging
 					total_value += dist_vals[j];
@@ -98,8 +104,9 @@ void run_door(Doorjamb * door)
 
 			//get the average for sending
 			double average_height = (double)total_value/((double)num_values);
-			run = false;
+			run = 0;
 
+			//determine the direction of the crossing
 			action_type_t action;
 			if(dir[0] == dist_sensor1->echo_pin_number)
 			{
@@ -116,6 +123,7 @@ void run_door(Doorjamb * door)
 					action = B_B;
 			}
 			simple_adv_transaction((uint32_t)average_height, action);
+			led_toggle(LED_1);
 		}
 
 	}

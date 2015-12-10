@@ -32,8 +32,9 @@ void send_trigger(HCSR04 * sensor)
 
 uint32_t get_high_time(HCSR04 * sensor)
 {
-	uint32_t counter = 1;
-	while(nrf_gpio_pin_read(sensor->echo_pin_number) == 0);
+	uint32_t counter = 0;
+	uint32_t counter2 = 1;
+	while(nrf_gpio_pin_read(sensor->echo_pin_number) == 0 && counter2 < 10000) {++counter2;}
 	while(nrf_gpio_pin_read(sensor->echo_pin_number) == 1)
 	{
 		++counter;
