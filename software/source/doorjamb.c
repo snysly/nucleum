@@ -5,8 +5,8 @@
 #include "simple_adv.h"
 #include "led.h"
 
-#define MEASUREMENT_LOWER_BOUND 20000
-#define MEASUREMENT_UPPER_BOUND 1000
+#define MEASUREMENT_LOWER_BOUND 1000
+#define MEASUREMENT_UPPER_BOUND 5000
 #define MAX_NUM_MEASUREMENTS 1000
 
 volatile int run = 0;
