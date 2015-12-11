@@ -8,7 +8,7 @@
 void dist_init(dist_sensor * sensor)
 {
 	nrf_gpio_cfg_output(sensor->trigger_pin_number);
-	nrf_gpio_cfg_input(sensor->echo_pin_number, NRF_GPIO_PIN_NOPULL);
+	nrf_gpio_cfg_input(sensor->echo_pin_number, NRF_GPIO_PIN_PULLDOWN);
 	switch(sensor->type)
 	{
 		case HCSR04:	sensor->trigger_time = 12;

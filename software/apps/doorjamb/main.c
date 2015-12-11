@@ -2,17 +2,13 @@
 #include "doorjamb.h"
 
 //define parameters for the pins things are connected to
-#define HCSR04_TRIGGER_1 24
-#define HCSR04_ECHO_1	23
-#define HCSR04_TRIGGER_2 21
-#define HCSR04_ECHO_2 22
+#define DIST_SENSOR_TRIGGER_1 24
+#define DIST_SENSOR_ECHO_1	23
+#define DIST_SENSOR_TRIGGER_2 21
+#define DIST_SENSOR_ECHO_2 22
 
 #define PIR_1_INPUT 9
 #define PIR_2_INPUT 10
-
-
-//set the ID of the DOOR
-#define DOOR_ID 1
 
 /*
 volatile int run = false;
@@ -30,9 +26,8 @@ int main(void)
 	Doorjamb door;
 
 	//assign the pin numbers and the door id
-	door.door_id = DOOR_ID;
-	assign_dist_sensors(&door, HCSR04_TRIGGER_1, HCSR04_ECHO_1,
-							HCSR04_TRIGGER_2, HCSR04_ECHO_2);
+	assign_dist_sensors(&door, DIST_SENSOR_TRIGGER_1, DIST_SENSOR_ECHO_1, HCSR04,
+							DIST_SENSOR_TRIGGER_2, DIST_SENSOR_ECHO_2, HCSR04);
 
 	assign_pir_sensors(&door, PIR_1_INPUT, pir_callback, PIR_2_INPUT, pir_callback);
 
@@ -44,14 +39,14 @@ int main(void)
 }
 /*
 	//initialize distance sensors
-	HCSR04 dist_sensor1;
-	dist_sensor1.trigger_pin_number = HCSR04_TRIGGER_1;
-	dist_sensor1.echo_pin_number = HCSR04_ECHO_1;
+	DIST_SENSOR dist_sensor1;
+	dist_sensor1.trigger_pin_number = DIST_SENSOR_TRIGGER_1;
+	dist_sensor1.echo_pin_number = DIST_SENSOR_ECHO_1;
 	hcsr04_init(&dist_sensor1);
 
-	HCSR04 dist_sensor2;
-	dist_sensor2.trigger_pin_number = HCSR04_TRIGGER_2;
-	dist_sensor2.echo_pin_number = HCSR04_ECHO_2;
+	DIST_SENSOR dist_sensor2;
+	dist_sensor2.trigger_pin_number = DIST_SENSOR_TRIGGER_2;
+	dist_sensor2.echo_pin_number = DIST_SENSOR_ECHO_2;
 	hcsr04_init(&dist_sensor2);
 
 	//initialize PIR Sensors

@@ -10,7 +10,7 @@ int main(void)
 	dist_sensor sensor;
 	sensor.trigger_pin_number = TRIGGER_PIN;
 	sensor.echo_pin_number = ECHO_PIN;
-	sensor.type = MAXBOTIX;
+	sensor.type = HCSR04;
 	dist_init(&sensor);
 
 	double result = get_dist(&sensor);
