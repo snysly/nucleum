@@ -5,7 +5,7 @@
 // it will return a number that increases as the width of that pulse increases
 #include <stdint.h>
 
-typedef enum {HCSR04, MAXBOTIX} sensor_type_t;
+typedef enum {HCSR04, MAXBOTIX, PING} sensor_type_t;
 
 //struct representing the HC-SR04 ultrasonic distance sensor
 typedef struct distsensor

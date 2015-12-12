@@ -1,25 +1,10 @@
 PROJECT_NAME = $(shell basename "$(realpath ./)")
 
 APPLICATION_SRCS = $(notdir $(wildcard ./*.c))
-APPLICATION_SRCS += softdevice_handler.c
-APPLICATION_SRCS += ble_advdata.c
-APPLICATION_SRCS += ble_conn_params.c
-APPLICATION_SRCS += app_timer.c
-APPLICATION_SRCS += ble_srv_common.c
-APPLICATION_SRCS += app_util_platform.c
-APPLICATION_SRCS += nrf_drv_common.c
-APPLICATION_SRCS += nrf_delay.c
+#APPLICATION_SRCS += softdevice_handler.c
+#APPLICATION_SRCS += app_timer.c
 APPLICATION_SRCS += led.c
-APPLICATION_SRCS += simple_ble.c
-APPLICATION_SRCS += simple_adv.c
-APPLICATION_SRCS += nrf_drv_gpiote.c
-APPLICATION_SRCS += utils.c
-APPLICATION_SRCS += ParallaxPIR.c
 APPLICATION_SRCS += dist_sensor.c
-APPLICATION_SRCS += doorjamb.c
-#APPLICATION_SRCS += simple_ble.c
-#APPLICATION_SRCS += simple_adv.c
-APPLICATION_SRCS += simple_doorjamb_adv.c
 
 DEVICE = NRF51
 
@@ -44,8 +29,8 @@ SDK_PATH ?= ../../nrf5x-base/sdk/nrf51_sdk_9.0.0/
 LIBRARY_PATHS += .  ../../include
 SOURCE_PATHS += ../../source
 
-CFLAGS = -I../../nrf5x-base/sdk/nrf51_sdk_9.0.0/components/drivers_nrf/config/
+CFLAGS = -Os
 GDB_PORT_NUMBER = 2331
 
 include $(NRF_BASE_PATH)/Makefile.include
-include $(TEMPLATE_PATH)/Makefile
+include $(TEMPLATE_PATH)Makefile

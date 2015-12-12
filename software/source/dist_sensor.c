@@ -15,6 +15,8 @@ void dist_init(dist_sensor * sensor)
 						break;
 		case MAXBOTIX:	sensor->trigger_time = 22;
 						break;
+		case PING:		sensor->trigger_time = 5;
+						break;
 	}
 }
 
