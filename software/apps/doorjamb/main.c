@@ -26,8 +26,8 @@ int main(void)
 	Doorjamb door;
 
 	//assign the pin numbers and the door id
-	assign_dist_sensors(&door, DIST_SENSOR_TRIGGER_1, DIST_SENSOR_ECHO_1, HCSR04,
-							DIST_SENSOR_TRIGGER_2, DIST_SENSOR_ECHO_2, HCSR04);
+	assign_dist_sensors(&door, DIST_SENSOR_TRIGGER_1, DIST_SENSOR_ECHO_1, MAXBOTIX,
+							DIST_SENSOR_TRIGGER_2, DIST_SENSOR_ECHO_2, MAXBOTIX);
 
 	assign_pir_sensors(&door, PIR_1_INPUT, pir_callback, PIR_2_INPUT, pir_callback);
 

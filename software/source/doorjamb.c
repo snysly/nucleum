@@ -7,7 +7,8 @@
 
 #define MEASUREMENT_LOWER_BOUND 1000
 #define MEASUREMENT_UPPER_BOUND 3000
-#define MAX_NUM_MEASUREMENTS 500
+#define MAX_NUM_MEASUREMENTS 250
+#define PERCENT_DIFF_ACCEPT 30
 
 volatile int run = 0;
 volatile int most_recent_pin = 0;
@@ -58,6 +59,47 @@ void doorjamb_init(Doorjamb * door)
 	pir_init(&(door->pir_2));
 }
 
+double filter_heights(volatile uint32_t dist_vals[MAX_NUM_MEASUREMENTS], int i)
+{
+	//when done with max number of measurements, or crossing has been called off
+	int j = 0;
+	volatile uint32_t total_value = 0.0;
+	volatile int num_values = 0;
+	uint32_t last_val = 0;
+	for(j = 0; j < i; ++j)
+	{
+		//check if the value is an actual or missed measurement
+		if(dist_vals[j] < MEASUREMENT_UPPER_BOUND && MEASUREMENT_LOWER_BOUND < dist_vals[j])
+		{
+			
+			if(last_val != 0)
+			{
+				int diff = (int)dist_vals[j] - (int)last_val;
+				if(diff < 0) diff = -diff;
+				double percent_diff = ((double)diff/((double)dist_vals[j]))* 100.0;
+				if(percent_diff < PERCENT_DIFF_ACCEPT)
+				{
+					total_value += dist_vals[j];
+					++num_values;
+				}
+				last_val = dist_vals[j];
+			}
+			else
+			{
+				//if it is an actual measurement, record data for averaging
+//				total_value += dist_vals[j];
+//				++num_values;
+				last_val = dist_vals[j];
+			}
+		}
+
+		//zero out the distance values to prevent future problems
+	//`	dist_vals[j] = 0.0;
+	}
+
+	//get the average for sending
+	return (double)total_value/((double)num_values);
+}
 //runs the door
 void run_door(Doorjamb * door)
 {	
@@ -66,6 +108,7 @@ void run_door(Doorjamb * door)
 
 	//intialize data collection 
 	volatile uint32_t dist_vals[MAX_NUM_MEASUREMENTS];
+	volatile uint32_t dist_vals2[MAX_NUM_MEASUREMENTS];
 	volatile int dir[2];
 	//actual loops
 	while(1)
@@ -78,36 +121,20 @@ void run_door(Doorjamb * door)
 			int i = 0;
 			for(i = 0; i < MAX_NUM_MEASUREMENTS; ++i)
 			{
-				dist_vals[i++] = get_dist(dist_sensor1);
-				dist_vals[i] = get_dist(dist_sensor2);
+				dist_vals[i] = get_dist(dist_sensor1);
+				dist_vals2[i] = get_dist(dist_sensor2);
 			}
 			//if run is not set, then another interrupt has occurred
 			//if(!run)
 			//{
-				dir[1] = most_recent_pin;
+			dir[1] = most_recent_pin;
 			//}
 
-			//when done with max number of measurements, or crossing has been called off
-			int j = 0;
-			volatile uint32_t total_value = 0.0;
-			volatile int num_values = 0;
-			for(j = 0; j < i; ++j)
-			{
-				//check if the value is an actual or missed measurement
-				if(dist_vals[j] < MEASUREMENT_UPPER_BOUND && MEASUREMENT_LOWER_BOUND < dist_vals[j])
-				{
-					//if it is an actual measurement, record data for averaging
-					total_value += dist_vals[j];
-					++num_values;
-				}
-
-				//zero out the distance values to prevent future problems
-			//`	dist_vals[j] = 0.0;
-			}
-
-			//get the average for sending
-			double average_height = (double)total_value/((double)num_values);
-			run = 0;
+			//get the heights
+			volatile double height1 = filter_heights(dist_vals, i);
+			volatile double height2 = filter_heights(dist_vals2, i);
+			
+			double average_height = (height1 + height2)/2.0;
 
 			//determine the direction of the crossing
 			action_type_t action;
@@ -127,6 +154,7 @@ void run_door(Doorjamb * door)
 			}
 			simple_adv_transaction((uint32_t)average_height, action);
 			led_toggle(LED_1);
+			run = 0;//turn of the loop
 		}
 
 	}

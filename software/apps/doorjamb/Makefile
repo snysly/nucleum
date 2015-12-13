@@ -44,7 +44,7 @@ SDK_PATH ?= ../../nrf5x-base/sdk/nrf51_sdk_9.0.0/
 LIBRARY_PATHS += .  ../../include
 SOURCE_PATHS += ../../source
 
-CFLAGS = -I../../nrf5x-base/sdk/nrf51_sdk_9.0.0/components/drivers_nrf/config/
+CFLAGS = -Os -I../../nrf5x-base/sdk/nrf51_sdk_9.0.0/components/drivers_nrf/config/
 GDB_PORT_NUMBER = 2331
 
 include $(NRF_BASE_PATH)/Makefile.include
